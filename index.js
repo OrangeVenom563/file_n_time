@@ -20,7 +20,13 @@ const allFiles = (cb) => {
   };
 
 app.get('/',(req,res)=>{
-    fs.readdir(path, callbackFunction) 
+    fs.readdir(p(''), (err,dirContent)=>{
+        if(err){
+            res.json({error:err})
+        }else{
+            res.json({'files_created':dirContent})
+        }
+    }) 
 })
 
 app.get('/create-file',(req,res)=>{
