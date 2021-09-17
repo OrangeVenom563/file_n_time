@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const fs = require('fs');
 const path = require('path');
@@ -9,15 +10,7 @@ const p = (fname)=> (path.join(
     fname
   ))
 
-const allFiles = (cb) => {
-    fs.readdir(p, (err, fileContent) => {
-      if (err) {
-        console.log(err)
-      } else {
-        console.log(fileContent)
-      }
-    });
-  };
+app.use(cors());
 
 app.get('/',(req,res)=>{
     fs.readdir(p(''), (err,dirContent)=>{
@@ -39,14 +32,11 @@ app.get('/create-file',(req,res)=>{
     " "+date.getHours()+
     "."+date.getMinutes()+
     "."+date.getSeconds()+".txt";
-   
-    console.log(p(fname))
 
-      fs.writeFile(p(fname), timeStamp.toString(), (err) => {console.log(err)});
-
+    fs.writeFile(p(fname), timeStamp.toString(), (err) => {console.log(err)});
     res.json({message:`created file ${fname}`})
 })
 
-app.listen('5000',()=>console.log("server listerning to port 5000"))
+app.listen(process.env.PORT||'5000',()=>console.log("server listerning to port 5000"))
 
 
